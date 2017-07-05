@@ -192,14 +192,25 @@ Map.prototype.setCells = function (newCells) {
   }
 };
 
-Map.prototype.bomba = function (alvo, ctx){
-  var bomba = new Sprite();
-  bomba.y = (alvo.localizacaoGY(this)+0.5)*this.SIZE;
-  bomba.x = (alvo.localizacaoGX(this)+0.5)*this.SIZE;
-  bomba.color = "blue";
-  this.bombs.push(bomba);
-  console.log(pc1.localizacaoGX(map));
-  console.log(pc1.localizacaoGY(map));
+Map.prototype.bomba = function (pc, ctx){
+  if(pc.cooldown == 0){
+    var bomba = new Sprite();
+    bomba.y = (pc.localizacaoGY(this)+0.5)*this.SIZE;
+    bomba.x = (pc.localizacaoGX(this)+0.5)*this.SIZE;
+    bomba.color = "blue";
+    bomba.explodes = 1;
+    pc.cooldown = 2;
+    this.bombs.push(bomba);
+    console.log(pc.localizacaoGX(map));
+    console.log(pc.localizacaoGY(map));
+    console.log(pc.cooldown);
+  }
+}
+
+Map.prototype.bombaCooldown = function(ctx){
+  for(i = map.bombs.length -1; i >=0; i--){
+      map.bombs.splices(i,1);
+  }
 }
 
 Map.prototype.tempoAcabou = function() {

@@ -4,6 +4,8 @@ function Sprite(){
   this.vx = 0;
   this.vy = 0;
   this.SIZE = 16;
+  this.cooldown = 0;
+  this.explodes = 0;
   this.color = "rgba(0,0,0,0.3)";
   this.pose = 0;
   this.frame = 0;
@@ -158,17 +160,17 @@ Sprite.prototype.mover = function (map, dt) {
   this.gx = Math.floor(this.x/map.SIZE);
   this.gy = Math.floor(this.y/map.SIZE);
   //this.vy += 80*dt;
-  if(this.vx>0 && map.cells[this.gy][this.gx+1]==1){
+  if(this.vx>0 && map.cells[this.gy][this.gx+1]!=2){
     this.x += Math.min((this.gx+1)*map.SIZE - (this.x+this.SIZE/2),this.vx*dt);
-  } else if(this.vx <0 && map.cells[this.gy][this.gx-1]==1){
+  } else if(this.vx <0 && map.cells[this.gy][this.gx-1]!=2){
       this.x += Math.max((this.gx)*map.SIZE - (this.x-this.SIZE/2),this.vx*dt);
     }
   else {
     this.x = this.x + this.vx*dt;
   }
-  if(this.vy >0 && map.cells[this.gy+1][this.gx]==1){
+  if(this.vy >0 && map.cells[this.gy+1][this.gx]!=2){
     this.y += Math.min((this.gy+1)*map.SIZE - (this.y+this.SIZE/2),this.vy*dt);
-  } else if( this.vy<0 && map.cells[this.gy-1][this.gx]==1){
+  } else if( this.vy<0 && map.cells[this.gy-1][this.gx]!=2){
       this.y += Math.max((this.gy)*map.SIZE - (this.y-this.SIZE/2),this.vy*dt);
     }
   else {
@@ -177,12 +179,17 @@ Sprite.prototype.mover = function (map, dt) {
 
   // -- Clareando o caminho --
 
-  if(map.cells[this.gy][this.gx] != 2){
+  /*if(map.cells[this.gy][this.gx] != 2){
     map.cells[this.gy][this.gx] = 2;
-  }
+  }*/
 
-  map.minasQtd = 0;
-  map.tesourosQtd = 0;
+  if(this.cooldown>0) {
+    this.cooldown -= dt;
+    console.log("Maior que zero");
+  } else {
+    this.cooldown = 0;
+    console.log("Igual a zero");
+  }
 
   this.frame += this.poses[this.pose].v*dt;
   if(this.frame>this.poses[this.pose].frames-1){
