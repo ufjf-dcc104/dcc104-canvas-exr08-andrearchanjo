@@ -208,30 +208,6 @@ Sprite.prototype.timeoutBomba = function(dt){
   }
 }
 
-Sprite.prototype.colisaoTesouro = function (ctx, map){
-  this.gx = Math.floor(this.x/map.SIZE);
-  this.gy = Math.floor(this.y/map.SIZE);
-
-  if(map.cells[this.gy][this.gx] == 4){
-    map.pontuacao++;
-    console.log(map.pontuacao);
-  }
-
-}
-
-Sprite.prototype.colisaoMina = function (ctx, map){
-  this.gx = Math.floor(this.x/map.SIZE);
-  this.gy = Math.floor(this.y/map.SIZE);
-
-  if(map.cells[this.gy][this.gx] == 5){
-    map.gameOver = true;
-    this.vx = 0;
-    this.vy = 0;
-
-    console.log("Você perdeu!");
-  }
-}
-
 Sprite.prototype.colidiuCom = function (alvo) {
   if(this.x + this.width/2 < alvo.x - alvo.width/2)   return false;  // colisão pela esquerda
   if(this.x - this.width/2 > alvo.x + alvo.width/2)   return false;  // colisão pela direita

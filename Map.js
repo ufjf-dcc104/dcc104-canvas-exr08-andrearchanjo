@@ -127,7 +127,7 @@ Map.prototype.bomba = function (pc, ctx){
     bomba.explodes = 2;
     bomba.gx = pc.gx;
     bomba.gy = pc.gy;
-    pc.cooldown = 2;
+    pc.cooldown = 1;
 
     this.cells[pc.gy][pc.gx] = 4;
     this.bombs.push(bomba);
@@ -137,7 +137,12 @@ Map.prototype.bomba = function (pc, ctx){
   }
 }
 
-Map.prototype.bombaExplodes = function(dt){
+Map.prototype.bombaExplodes = function(dt, pc1){
+  pc1.gx = pc1.localizacaoGX(this);
+  pc1.gy = pc1.localizacaoGY(this);
+  //pc2.gx = pc.localizacaoGX(this);
+  //pc2.gy = pc.localizacaoGY(this);
+  
   for(i = this.bombs.length -1; i >=0; i--){
       if(this.bombs[i].timeoutBomba(dt)){
         if(this.cells[this.bombs[i].gy-1][this.bombs[i].gx] == 3){//cima
