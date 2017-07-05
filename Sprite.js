@@ -75,6 +75,7 @@ Sprite.prototype.localizacaoGY = function(map){
   return this.gy;
 }
 
+/*
 Sprite.prototype.sentirArea = function(ctx, map){
   this.gx = Math.floor(this.x/map.SIZE);
   this.gy = Math.floor(this.y/map.SIZE);
@@ -152,7 +153,7 @@ Sprite.prototype.sentirArea = function(ctx, map){
   //console.log(map.minasQtd);
   //console.log(map.tesourosQtd);
 
-}
+}*/
 
 
 
@@ -185,10 +186,10 @@ Sprite.prototype.mover = function (map, dt) {
 
   if(this.cooldown>0) {
     this.cooldown -= dt;
-    console.log("Maior que zero");
+    //console.log("Maior que zero");
   } else {
     this.cooldown = 0;
-    console.log("Igual a zero");
+    //console.log("Igual a zero");
   }
 
   this.frame += this.poses[this.pose].v*dt;
@@ -198,7 +199,6 @@ Sprite.prototype.mover = function (map, dt) {
 };
 
 Sprite.prototype.timeoutBomba = function(dt){
-  console.log("timeout");
   if(this.explodes > 0){
     this.explodes -= dt;
     return false;
