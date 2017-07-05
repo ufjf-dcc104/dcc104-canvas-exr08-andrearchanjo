@@ -52,11 +52,13 @@ function passo(t){
   pc1.colisaoTesouro(ctx, map);
   pc1.colisaoMina(ctx, map);
   
+  map.bombaExplodes(dt);
+
   //map.vitoriaObtida();
   //map.tempoAcabou();
   //map.showInformations(ctx);
   //map.colidiuComTesouro(pc);
-  
+
   pc1.mover(map, dt);
   //pc.sentirArea(ctx, map);
   //map.perseguir(pc);

@@ -198,7 +198,7 @@ Map.prototype.bomba = function (pc, ctx){
     bomba.y = (pc.localizacaoGY(this)+0.5)*this.SIZE;
     bomba.x = (pc.localizacaoGX(this)+0.5)*this.SIZE;
     bomba.color = "blue";
-    bomba.explodes = 1;
+    bomba.explodes = 2;
     pc.cooldown = 2;
     this.bombs.push(bomba);
     console.log(pc.localizacaoGX(map));
@@ -207,11 +207,17 @@ Map.prototype.bomba = function (pc, ctx){
   }
 }
 
-Map.prototype.bombaCooldown = function(ctx){
+Map.prototype.bombaExplodes = function(dt){
+  var that = this;
   for(i = map.bombs.length -1; i >=0; i--){
-      map.bombs.splices(i,1);
+      if(map.bombs[i].timeoutBomba(dt)){
+        console.log("explodes");
+        map.bombs.splice(i,1);
+      } 
   }
 }
+
+
 
 Map.prototype.tempoAcabou = function() {
   if(this.tempo < 0){

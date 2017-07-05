@@ -197,6 +197,17 @@ Sprite.prototype.mover = function (map, dt) {
   }
 };
 
+Sprite.prototype.timeoutBomba = function(dt){
+  console.log("timeout");
+  if(this.explodes > 0){
+    this.explodes -= dt;
+    return false;
+  } else{
+    this.explodes = 0;
+    return true;
+  }
+}
+
 Sprite.prototype.colisaoTesouro = function (ctx, map){
   this.gx = Math.floor(this.x/map.SIZE);
   this.gy = Math.floor(this.y/map.SIZE);
