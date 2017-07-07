@@ -3,6 +3,7 @@ function Sprite(){
   this.y = 0;
   this.vx = 0;
   this.vy = 0;
+  this.life = 1;
   this.SIZE = 16;
   this.cooldown = 0;
   this.explodes = 0;
@@ -10,11 +11,14 @@ function Sprite(){
   this.pose = 0;
   this.frame = 0;
   this.poses = [
-    {row: 11, col:1, frames:8, v: 4},
-    {row: 10, col:1, frames:8, v: 4},
-    {row: 9, col:1, frames:8, v: 4},
-    {row: 8, col:1, frames:8, v: 4},
-    {row: 11, col:0, frames:1, v: 4},
+    {row: 11, col:1, frames:8, v: 4},//direita[0]
+    {row: 10, col:1, frames:8, v: 4},//baixo[1]
+    {row: 9, col:1, frames:8, v: 4}, //esquerda[2]
+    {row: 8, col:1, frames:8, v: 4}, //cima[3]
+    {row: 11, col:0, frames:1, v: 4},//parado direita[4]
+    {row: 10, col:0, frames:1, v: 4},//parado baixo[5]
+    {row: 9, col:0, frames:1, v: 4}, //parado esquerda[6]
+    {row: 8, col:0, frames:1, v: 4}, //parado cima[7]
   ];
   this.images = null;
   this.imgKey = "pc";
@@ -178,18 +182,10 @@ Sprite.prototype.mover = function (map, dt) {
     this.y = this.y + this.vy*dt;
   }
 
-  // -- Clareando o caminho --
-
-  /*if(map.cells[this.gy][this.gx] != 2){
-    map.cells[this.gy][this.gx] = 2;
-  }*/
-
   if(this.cooldown>0) {
     this.cooldown -= dt;
-    //console.log("Maior que zero");
   } else {
     this.cooldown = 0;
-    //console.log("Igual a zero");
   }
 
   this.frame += this.poses[this.pose].v*dt;
@@ -215,6 +211,29 @@ Sprite.prototype.colidiuCom = function (alvo) {
   if(this.y - this.height/2 > alvo.y + alvo.height/2)  return false;  // colisão por baixo
   return true;
 };
+
+Sprite.prototype.playerDies = function (map, bomba){  
+  if(bomba.gx == this.gx && bomba.gy == this.gy){
+    this.life = 0;
+    console.log("You Lose");
+  }
+  if(bomba.gx + 1 == this.gx && bomba.gy == this.gy){
+    this.life = 0;
+    console.log("You Lose");
+  }
+  if(bomba.gx - 1 == this.gx && bomba.gy == this.gy){
+    this.life = 0;
+    console.log("You Lose");
+  }
+  if(bomba.gx == this.gx && bomba.gy + 1 == this.gy){
+    this.life = 0;
+    console.log("You Lose");
+  }
+  if(bomba.gx == this.gx && bomba.gy - 1 == this.gy){
+    this.life = 0;
+    console.log("You Lose");
+  }
+}
 
 Sprite.prototype.perseguir = function (alvo) {
     var dx = alvo.x - this.x;

@@ -1,14 +1,6 @@
 function Map(rows, collumns) {
   this.SIZE = 32;
-  this.minas = [];
-  this.minasQtd = 0;;
-  this.tesouros = [];
-  this.tesourosQtd = 0;
   this.bombs = [];
-  this.pontuacao = 0;
-  this.gameOver = false;
-  this.tempo = 200;
-  this.victory = false;
   this.cells = [];
   for (var r = 0; r < rows; r++) {
     this.cells[r] = [];
@@ -19,16 +11,6 @@ function Map(rows, collumns) {
 }
 
 Map.prototype.desenhar = function (ctx, img) {
-  
-  for (var i = 0; i < this.tesouros.length; i++) {
-      this.tesouros[i].desenharQuadrado(ctx);
-      //this.tesouros[i].desenharObjeto(ctx, img.images[this.tesouros[i].imgKey]);
-  }
-
-  for (var i = 0; i < this.minas.length; i++) {
-      this.minas[i].desenharQuadrado(ctx);
-      //this.minas[i].desenharObjeto(ctx, img.images[this.minas[i].imgKey]);
-  }
 
   for (var i = 0; i < this.bombs.length; i++) {
       this.bombs[i].desenharQuadrado(ctx);
@@ -64,26 +46,36 @@ Map.prototype.desenhar = function (ctx, img) {
 
 };
 
-Map.prototype.showInformations = function(ctx){
+Map.prototype.endGame = function(ctx, pc1, pc2){
   
-  ctx.font="20px Verdana";
-  ctx.fillStyle = "red";
-  ctx.fillText("Minas: ", 285, 80);
-  
-  // -- Fim de Jogo --
-
-  if(this.gameOver){
-    ctx.fillStyle = "blue";
-    ctx.fillText("Game Over", 285, 225);
+  if(pc1.life == 0){
+    return true;
   }
 
-  // -- Vitória -- 
-
-  if(this.victory){
-    ctx.fillStyle = "blue";
-    ctx.fillText("Vitória", 285, 225);
+  if(pc2.life == 0){
+    return true;
   }
 
+  return false;
+
+};
+
+Map.prototype.showInformations = function(ctx, pc1, pc2){
+  if(pc1.life == 0){
+    ctx.font="20px Verdana";
+    ctx.fillStyle = "red";
+    ctx.fillText("Player 2 Venceu", 150, 175);
+    return true;
+  }
+
+  if(pc2.life == 0){
+    ctx.font="20px Verdana";
+    ctx.fillStyle = "red";
+    ctx.fillText("Player 1 Venceu!", 150, 175);
+    return true;
+  }
+
+  return false;  
 }
 
 Map.prototype.getCells = function () {
@@ -127,24 +119,36 @@ Map.prototype.bomba = function (pc, ctx){
     bomba.explodes = 2;
     bomba.gx = pc.gx;
     bomba.gy = pc.gy;
+    
     pc.cooldown = 1;
-
+      
     this.cells[pc.gy][pc.gx] = 4;
+    
     this.bombs.push(bomba);
-    //console.log(pc.gx);
-    //console.log(pc.gy);
-    //console.log(pc.cooldown);
+
   }
 }
 
-Map.prototype.bombaExplodes = function(dt, pc1){
+Map.prototype.bombaExplodes = function(dt, pc1 , pc2){
+  
+  //Localização do player 1
   pc1.gx = pc1.localizacaoGX(this);
   pc1.gy = pc1.localizacaoGY(this);
-  //pc2.gx = pc.localizacaoGX(this);
-  //pc2.gy = pc.localizacaoGY(this);
   
+  //Localização do player 2
+  pc2.gx = pc2.localizacaoGX(this);
+  pc2.gy = pc2.localizacaoGY(this);
+
   for(i = this.bombs.length -1; i >=0; i--){
       if(this.bombs[i].timeoutBomba(dt)){
+        
+        //Verifica se o player 1 está no alcance da bomba
+        pc1.playerDies(map, this.bombs[i]);
+        
+        //Verifica se o player 2 está no alcance da bomba  
+        pc2.playerDies(map, this.bombs[i]);
+
+        //Limpa o cenário
         if(this.cells[this.bombs[i].gy-1][this.bombs[i].gx] == 3){//cima
           this.cells[this.bombs[i].gy-1][this.bombs[i].gx] = 2;
         }
@@ -158,32 +162,10 @@ Map.prototype.bombaExplodes = function(dt, pc1){
           this.cells[this.bombs[i].gy][this.bombs[i].gx-1] = 2;
         }
         this.cells[this.bombs[i].gy][this.bombs[i].gx] = 2;
+        
+        //Remove a bomba
         this.bombs.splice(i,1);
       } 
   }
-}
-
-
-
-Map.prototype.tempoAcabou = function() {
-  if(this.tempo < 0){
-    this.gameOver = true;
-  }
 };
 
-Map.prototype.vitoriaObtida = function() {
-  if(this.tesouros.length == this.pontuacao){
-    this.victory = true;
-  }
-};
-
-/*Map.prototype.mover = function (dt) {
-  for (var i = 0; i < this.enemies.length; i++) {
-    this.enemies[i].mover(this,dt);
-  }
-};
-Map.prototype.perseguir = function (alvo) {
-  for (var i = 0; i < this.enemies.length; i++) {
-    this.enemies[i].perseguir(alvo);
-  }
-};*/

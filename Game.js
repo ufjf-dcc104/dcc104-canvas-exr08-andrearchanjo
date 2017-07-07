@@ -14,13 +14,11 @@ var l = 8;
 
 function init(){
   canvas = document.getElementsByTagName('canvas')[0];
-  canvas.width = 520;
-  canvas.height = 520;
+  canvas.width = 480;
+  canvas.height = 480;
   ctx = canvas.getContext("2d");
   images = new ImageLoader();
   images.load("pc","pc.png");
-  images.load("mina", "mina.png");
-  images.load("tesouro", "tesouro.png");
   map = new Map(Math.floor(canvas.height/40), Math.floor(canvas.width/40));
   map.images = images;
   map.setCells([
@@ -51,36 +49,33 @@ function init(){
 }
 
 function passo(t){
-  dt = (t-anterior)/1000;
-  requestAnimationFrame(passo);
-  //ctx.save();
-  //ctx.translate(250,0);
-  //ctx.scale(1,0.5);
-  //ctx.rotate(Math.PI/4);
-  ctx.clearRect(0,0, canvas.width, canvas.height);
-  //pc1.colisaoTesouro(ctx, map);
-  //pc1.colisaoMina(ctx, map);
+  if(!map.endGame(ctx, pc1, pc2)){
+    dt = (t-anterior)/1000;
+    requestAnimationFrame(passo);
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    
+    map.bombaExplodes(dt,pc1,pc2);
+
+    console.log(pc1.life);
+    console.log(pc2.life);
+
+    map.endGame(ctx, pc1, pc2);
+
+    pc1.mover(map, dt);
+    pc2.mover(map, dt);
+
+    map.desenhar(ctx, images);
+    pc1.desenhar(ctx);
+    pc2.desenhar(ctx);
+    anterior = t;
   
-  map.bombaExplodes(dt,pc1);
-
-  //map.vitoriaObtida();
-  //map.tempoAcabou();
-  //map.showInformations(ctx);
-  //map.colidiuComTesouro(pc);
-
-  pc1.mover(map, dt);
-  pc2.mover(map, dt);
-  //pc.sentirArea(ctx, map);
-  //map.perseguir(pc);
-  //map.mover(dt);
-  map.desenhar(ctx, images);
-  pc1.desenhar(ctx);
-  pc2.desenhar(ctx);
-  anterior = t;
-  //ctx.restore();
-  frame = (frame<9)?frame:1;
-  //images.drawFrame(ctx,"pc",8,Math.floor(frame),0,0,64);
-  frame+=2*dt;
+    frame = (frame<9)?frame:1;
+    //images.drawFrame(ctx,"pc",8,Math.floor(frame),0,0,64);
+    frame+=2*dt;
+  } else{
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    map.showInformations(ctx, pc1, pc2);
+  }
 }
 
 function initControls(){
@@ -95,85 +90,51 @@ function initControls(){
         e.preventDefault();
         break;
       case 37: //esquerda
-        if(!map.gameOver && !map.victory){
-          pc1.vx = -100;
-          pc1.vy = 0;
-          pc1.pose = 2;
-          
-        } else {
-          pc1.vx = 0;
-        }
+        pc1.vx = -100;
+        pc1.vy = 0;
+        pc1.pose = 2;
         e.preventDefault();
         break;
       case 38: //cima
-        if(!map.gameOver && !map.victory){
-          pc1.vx = 0;
-          pc1.vy = -100;
-          pc1.pose = 3;
-        } else{
-          pc1.vy = 0;
-        }
+        pc1.vx = 0;
+        pc1.vy = -100;
+        pc1.pose = 3;
         e.preventDefault();
         break;
       case 39: //direita
-        if(!map.gameOver && !map.victory){
-          pc1.vx = 100;
-          pc1.vy = 0;
-          pc1.pose = 0;
-        } else {
-          pc1.vx = 0;
-        }
+        pc1.vx = 100;
+        pc1.vy = 0;
+        pc1.pose = 0;
         e.preventDefault();
         break;
       case 40: //baixo
-        if(!map.gameOver && !map.victory){
-          pc1.vx = 0;
-          pc1.vy = 100;
-          pc1.pose = 1;
-        } else {
-          pc1.vy = 0;
-        }
-          e.preventDefault();
+        pc1.vx = 0;
+        pc1.vy = 100;
+        pc1.pose = 1;
+        e.preventDefault();
         break;
       case 65: //esquerda
-        if(!map.gameOver && !map.victory){
-          pc2.vx = -100;
-          pc2.vy = 0;
-          pc2.pose = 2;
-          
-        } else {
-          pc2.vx = 0;
-        }
+        pc2.vx = -100;
+        pc2.vy = 0;
+        pc2.pose = 2;
         e.preventDefault();
         break;
       case 68: //direita
-        if(!map.gameOver && !map.victory){
-          pc2.vx = 100;
-          pc2.vy = 0;
-          pc2.pose = 0;
-        } else {
-          pc2.vx = 0;
-        }
+        pc2.vx = 100;
+        pc2.vy = 0;
+        pc2.pose = 0;
         e.preventDefault();
         break;
       case 83: //baixo
-        if(!map.gameOver && !map.victory){
-          pc2.vx = 0;
-          pc2.vy = 100;
-          pc2.pose = 1;
-        } else {
-          pc2.vy = 0;
-        }
+        pc2.vx = 0;
+        pc2.vy = 100;
+        pc2.pose = 1;
         e.preventDefault();
         break;
       case 87: //cima
-        if(!map.gameOver && !map.victory){
-          pc2.vx = 0;
-          pc2.vy = -100;
-          pc2.pose = 3;
-        } else{
-          pc2.vy = 0;
-        }
+        pc2.vx = 0;
+        pc2.vy = -100;
+        pc2.pose = 3;
         e.preventDefault();
         break;
       default:
@@ -181,37 +142,37 @@ function initControls(){
   });
   addEventListener('keyup', function(e){
     switch (e.keyCode) {
-      case 37:
+      case 37: //esquerda
+        pc1.vx = 0;
+        pc1.pose = 6;
+        break;
+      case 38: //cima
+        pc1.vy = 0;
+        pc1.pose = 7;
+        break;
+      case 39: //direita
         pc1.vx = 0;
         pc1.pose = 4;
         break;
-      case 38:
+      case 40: //baixo
         pc1.vy = 0;
-        pc1.pose = 4;
+        pc1.pose = 5;
         break;
-      case 39:
-        pc1.vx = 0;
-        pc1.pose = 4;
-        break;
-      case 40:
-        pc1.vy = 0;
-        pc1.pose = 4;
-        break;
-      case 65:
+      case 65: //esquerda
         pc2.vx = 0;
-        pc2.pose = 0
+        pc2.pose = 6;
         break;
-      case 68:
+      case 68: //direita
         pc2.vx = 0;
         pc2.pose = 4;
         break;
-      case 83:
+      case 83: //baixo
         pc2.vy = 0;
-        pc2.pose = 4;
+        pc2.pose = 5;
         break;
-      case 87:
+      case 87: //cima
         pc2.vy = 0;
-        pc2.pose = 0;
+        pc2.pose = 7;
         break;
       default:
 
