@@ -56,8 +56,8 @@ function passo(t){
     
     map.bombaExplodes(dt,pc1,pc2);
 
-    console.log(pc1.life);
-    console.log(pc2.life);
+    //console.log(pc1.life);
+    //console.log(pc2.life);
 
     map.endGame(ctx, pc1, pc2);
 

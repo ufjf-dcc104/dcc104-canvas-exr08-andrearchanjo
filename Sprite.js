@@ -79,88 +79,6 @@ Sprite.prototype.localizacaoGY = function(map){
   return this.gy;
 }
 
-/*
-Sprite.prototype.sentirArea = function(ctx, map){
-  this.gx = Math.floor(this.x/map.SIZE);
-  this.gy = Math.floor(this.y/map.SIZE);
-
-  // -- Sentir Minas --
-
-  if(map.cells[this.gy-1][this.gx] == 5){//cima
-    //map.cells[this.gy-1][this.gx] = 2;
-    map.minasQtd++;
-  }
-  if(map.cells[this.gy+1][this.gx] == 5){//baixo
-    //map.cells[this.gy+1][this.gx] = 2;
-    map.minasQtd++;    
-  }  
-  if(map.cells[this.gy][this.gx+1] == 5){//direita
-    //map.cells[this.gy][this.gx+1] = 2;
-    map.minasQtd++;  
-  }
-  if(map.cells[this.gy][this.gx-1] == 5){//esquerda
-    //map.cells[this.gy][this.gx-1] = 2;
-    map.minasQtd++;  
-  }
-  if(map.cells[this.gy-1][this.gx+1] == 5){//cima-direita
-    //map.cells[this.gy-1][this.gx+1] = 2;
-    map.minasQtd++;  
-  }
-  if(map.cells[this.gy+1][this.gx+1] == 5){//baixo-direita
-    //map.cells[this.gy+1][this.gx+1] = 2;
-    map.minasQtd++;  
-  }
-  if(map.cells[this.gy-1][this.gx-1] == 5){//cima-esquerda
-    //map.cells[this.gy-1][this.gx-1] = 2;
-    map.minasQtd++;  
-  }
-  if(map.cells[this.gy+1][this.gx-1] == 5){//baixo-esquerda
-    //map.cells[this.gy+1][this.gx-1] = 2;
-    map.minasQtd++;  
-  } 
-
-  // -- Sentir Tesouros --
-
-  if(map.cells[this.gy-1][this.gx] == 4){//cima
-    //map.cells[this.gy-1][this.gx] = 2;
-    map.tesourosQtd++;
-  }
-  if(map.cells[this.gy+1][this.gx] == 4){//baixo
-    //map.cells[this.gy+1][this.gx] = 2;
-    map.tesourosQtd++;
-  }  
-  if(map.cells[this.gy][this.gx+1] == 4){//direita
-    //map.cells[this.gy][this.gx+1] = 2;
-    map.tesourosQtd++;  
-  }
-  if(map.cells[this.gy][this.gx-1] == 4){//esquerda
-    //map.cells[this.gy][this.gx-1] = 2;
-    map.tesourosQtd++;  
-  }
-  if(map.cells[this.gy-1][this.gx+1] == 4){//cima-direita
-    //map.cells[this.gy-1][this.gx+1] = 2;
-    map.tesourosQtd++;  
-  }
-  if(map.cells[this.gy+1][this.gx+1] == 4){//baixo-direita
-    //map.cells[this.gy+1][this.gx+1] = 2;
-    map.tesourosQtd++;  
-  }
-  if(map.cells[this.gy-1][this.gx-1] == 4){//cima-esquerda
-    //map.cells[this.gy-1][this.gx-1] = 2;
-    map.tesourosQtd++;  
-  }
-  if(map.cells[this.gy+1][this.gx-1] == 4){//baixo-esquerda
-    //map.cells[this.gy+1][this.gx-1] = 2;
-    map.tesourosQtd++;
-  }
-
-  //console.log(map.minasQtd);
-  //console.log(map.tesourosQtd);
-
-}*/
-
-
-
 Sprite.prototype.mover = function (map, dt) {
   this.gx = Math.floor(this.x/map.SIZE);
   this.gy = Math.floor(this.y/map.SIZE);
@@ -215,23 +133,23 @@ Sprite.prototype.colidiuCom = function (alvo) {
 Sprite.prototype.playerDies = function (map, bomba){  
   if(bomba.gx == this.gx && bomba.gy == this.gy){
     this.life = 0;
-    console.log("You Lose");
+    //console.log("You Lose");
   }
   if(bomba.gx + 1 == this.gx && bomba.gy == this.gy){
     this.life = 0;
-    console.log("You Lose");
+    //console.log("You Lose");
   }
   if(bomba.gx - 1 == this.gx && bomba.gy == this.gy){
     this.life = 0;
-    console.log("You Lose");
+    //console.log("You Lose");
   }
   if(bomba.gx == this.gx && bomba.gy + 1 == this.gy){
     this.life = 0;
-    console.log("You Lose");
+    //console.log("You Lose");
   }
   if(bomba.gx == this.gx && bomba.gy - 1 == this.gy){
     this.life = 0;
-    console.log("You Lose");
+    //console.log("You Lose");
   }
 }
 
