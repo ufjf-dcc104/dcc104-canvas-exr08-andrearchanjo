@@ -9,6 +9,10 @@ function Sprite(){
   this.explodes = 0;
   this.color = "rgba(0,0,0,0.3)";
   this.pose = 0;
+  this.width = 16;
+  this.height = 16;
+  this.powerUp = 0;
+  this.haste = false;
   this.frame = 0;
   this.poses = [
     {row: 11, col:1, frames:8, v: 4},//direita[0]
@@ -28,6 +32,19 @@ Sprite.prototype.desenhar = function (ctx) {
   this.desenharQuadrado(ctx);
   this.desenharPose(ctx);
 }
+
+Sprite.prototype.desenharPower = function (ctx) {
+  ctx.save();
+  ctx.translate(this.x, this.y);
+  ctx.rotate(this.angle*2*Math.PI/360);
+  ctx.fillStyle = this.color;
+  ctx.fillRect(-this.width/2, -this.height/2, this.width, this.height);
+  ctx.fill();
+  ctx.strokeStyle = this.color;
+  ctx.stroke();
+  ctx.strokeRect(-this.width/2, -this.height/2, this.width, this.height);
+  ctx.restore();
+};
 
 Sprite.prototype.desenharObjeto = function (ctx, img) {
   ctx.save();
@@ -135,21 +152,33 @@ Sprite.prototype.playerDies = function (map, bomba){
     this.life = 0;
     //console.log("You Lose");
   }
-  if(bomba.gx + 1 == this.gx && bomba.gy == this.gy){
-    this.life = 0;
-    //console.log("You Lose");
-  }
-  if(bomba.gx - 1 == this.gx && bomba.gy == this.gy){
-    this.life = 0;
-    //console.log("You Lose");
-  }
-  if(bomba.gx == this.gx && bomba.gy + 1 == this.gy){
-    this.life = 0;
-    //console.log("You Lose");
-  }
-  if(bomba.gx == this.gx && bomba.gy - 1 == this.gy){
-    this.life = 0;
-    //console.log("You Lose");
+  console.log(bomba.gy-1, bomba.gx);
+  for (j = 0; j <= pc1.powerUp; j++) {
+    if(map.cells[bomba.gy][bomba.gx + 1] != 1){  
+      if(bomba.gx + 1 + j  == this.gx && bomba.gy == this.gy){
+        this.life = 0;
+        //console.log("You Lose");
+      }
+    }
+    if(map.cells[bomba.gy][bomba.gx - 1] != 1){
+      if(bomba.gx - 1 - j == this.gx && bomba.gy == this.gy){
+        this.life = 0;
+        //console.log("You Lose");
+      }
+    }
+    if(map.cells[bomba.gy + 1][bomba.gx] != 1){
+      if(bomba.gx == this.gx && bomba.gy + 1 + j == this.gy){
+        this.life = 0;
+        //console.log("You Lose");
+      }
+    }
+    if(map.cells[bomba.gy - 1][bomba.gx] != 1){
+      //console.log("aqui");
+      if(bomba.gx == this.gx && bomba.gy - 1 - j == this.gy){
+        this.life = 0;
+        //console.log("You Lose");
+      }
+    }
   }
 }
 

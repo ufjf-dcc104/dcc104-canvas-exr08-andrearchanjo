@@ -4,6 +4,7 @@ var map;
 var pc1;
 var pc2;
 var dt;
+var audio;
 var images;
 var anterior = 0;
 var frame = 0;
@@ -34,6 +35,9 @@ function init(){
     [1,1,1,1,1,1,1,1,1,1],
   ]);
   
+  audio = new AudioLoader();
+  audio.load("boom", "boom.mp3")
+
   pc1 = new Sprite();
   pc1.y = (i+0.5)*map.SIZE;
   pc1.x = (j+0.5)*map.SIZE;
@@ -61,6 +65,10 @@ function passo(t){
 
     map.endGame(ctx, pc1, pc2);
 
+    map.colidiuComPowerUps(pc1);
+
+    map.colidiuComPowerUps(pc2);
+
     pc1.mover(map, dt);
     pc2.mover(map, dt);
 
@@ -82,59 +90,108 @@ function initControls(){
   addEventListener('keydown', function(e){
     switch (e.keyCode) {
       case 13:
-        map.bomba(pc2, ctx);
+        map.bomba(pc2, ctx, "p2");
         e.preventDefault();
         break;
       case 32:
-        map.bomba(pc1, ctx);
+        map.bomba(pc1, ctx, "p1");
         e.preventDefault();
         break;
       case 37: //esquerda
-        pc1.vx = -100;
-        pc1.vy = 0;
-        pc1.pose = 2;
+        if(pc1.haste){
+          pc1.vx = -150;
+          pc1.vy = 0;
+          pc1.pose = 2;
+        } else {
+          pc1.vx = -100;
+          pc1.vy = 0;
+          pc1.pose = 2;
+        }
+
         e.preventDefault();
         break;
       case 38: //cima
-        pc1.vx = 0;
-        pc1.vy = -100;
-        pc1.pose = 3;
+        if(pc1.haste){
+          pc1.vx = 0;
+          pc1.vy = -150;
+          pc1.pose = 3;
+        } else {
+          pc1.vx = 0;
+          pc1.vy = -100;
+          pc1.pose = 3;
+        }
         e.preventDefault();
         break;
       case 39: //direita
-        pc1.vx = 100;
-        pc1.vy = 0;
-        pc1.pose = 0;
+        if(pc1.haste){
+          pc1.vx = 150;
+          pc1.vy = 0;
+          pc1.pose = 0;
+        } else {
+          pc1.vx = 100;
+          pc1.vy = 0;
+          pc1.pose = 0;
+        }
         e.preventDefault();
         break;
       case 40: //baixo
-        pc1.vx = 0;
-        pc1.vy = 100;
-        pc1.pose = 1;
+        if(pc1.haste){
+          pc1.vx = 0;
+          pc1.vy = 150;
+          pc1.pose = 1;
+        } else {
+          pc1.vx = 0;
+          pc1.vy = 100;
+          pc1.pose = 1;
+        }
         e.preventDefault();
         break;
       case 65: //esquerda
-        pc2.vx = -100;
-        pc2.vy = 0;
-        pc2.pose = 2;
+        if(pc2.haste){
+          pc2.vx = -150;
+          pc2.vy = 0;
+          pc2.pose = 2;
+        } else {
+          pc2.vx = -100;
+          pc2.vy = 0;
+          pc2.pose = 2;
+        }
         e.preventDefault();
         break;
       case 68: //direita
-        pc2.vx = 100;
-        pc2.vy = 0;
-        pc2.pose = 0;
+        if(pc2.haste){
+          pc2.vx = 150;
+          pc2.vy = 0;
+          pc2.pose = 0;
+        } else {
+          pc2.vx = 100;
+          pc2.vy = 0;
+          pc2.pose = 0;
+        }
         e.preventDefault();
         break;
       case 83: //baixo
-        pc2.vx = 0;
-        pc2.vy = 100;
-        pc2.pose = 1;
+        if(pc2.haste){
+          pc2.vx = 0;
+          pc2.vy = 150;
+          pc2.pose = 1;
+        } else {
+          pc2.vx = 0;
+          pc2.vy = 100;
+          pc2.pose = 1;
+        }
         e.preventDefault();
         break;
       case 87: //cima
-        pc2.vx = 0;
-        pc2.vy = -100;
-        pc2.pose = 3;
+        if(pc2.haste){
+          pc2.vx = 0;
+          pc2.vy = -150;
+          pc2.pose = 3;
+        } else {
+          pc2.vx = 0;
+          pc2.vy = -100;
+          pc2.pose = 3;
+        }
         e.preventDefault();
         break;
       default:
